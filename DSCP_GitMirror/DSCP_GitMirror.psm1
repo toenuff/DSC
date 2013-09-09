@@ -6,25 +6,30 @@
 	(
 		[parameter(Mandatory = $true)]
 		[System.String]
-		$Destination
+		$Destination,
+        [Parameter(Mandatory = $true)]
+		[System.String]
+        [ValidateScript({Test-Path $_})]
+		$GitPath
 	)
-
-	#Write-Verbose "Use this cmdlet to deliver information about command processing."
-
-	#Write-Debug "Use this cmdlet to write debug information while troubleshooting."
-
-
-	<#
-	$returnValue = @{
-		Destination = [System.String]
-		GitPath = [System.String]
-		Branch = [System.String]
-	}
-
-	$returnValue
-	#>
-    
-    
+    $returnValue = @{}
+    if (Test-Path $Destination) {
+        cd $Destination
+	    $gitexe = Get-GitExe $GitPath
+        $status = @(& $gitexe status)
+        $status[0] -match 'On branch (.+)$' |out-null
+	    $returnValue = @{        
+		    Destination = $destination
+            GitPath = $gitexe
+            Url = (& $gitexe remote, "-v") 2>&1 |?{$_ -match '^origin\s+(.+)\s+\(fetch\)$'} |%{$matches[1]}
+            Branch = "not yet implemented"
+        }
+    } else {
+        $returnValue = @{
+            Destination = $Destination
+        }
+    }
+    return $returnValue
 }
 
 function Test-TargetResource
