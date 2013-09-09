@@ -174,7 +174,7 @@ function RemoveClone-Git {
         [Parameter(Mandatory=$true)]
         [string] $branch
     )
-    cd ..
+    cd c:\
     Write-Verbose "Deleting $destination"
     rm -Recurse $Destination -Force
     Clone-Git -gitexe $gitexe -url $url -destination $Destination -branch $Branch
@@ -191,6 +191,12 @@ function Clone-Git {
         [Parameter(Mandatory=$true)]
         [string] $branch
     )
+    $parentfolder = Split-Path $destination
+    Write-Verbose "Parent Folder: $parentfolder"
+    if (!(test-path $parentfolder)) {
+        Write-Verbose "Creating $parentfolder"
+        md $parentfolder
+    }
     Write-verbose "Cloning $branch from $url into $destination"
     try {
         ((& $gitexe "clone", "-b", $branch, "--single-branch", $url, $destination) 2>&1|%{$_}) -join "`r`n" |Write-Verbose
