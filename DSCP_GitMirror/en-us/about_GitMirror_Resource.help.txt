@@ -1,0 +1,16 @@
+﻿Syntax
+
+GitMirror [string] #ResourceName
+{
+    Destination = [string] #required
+    GitPath = [string] #required
+    Url = [string] #required
+    Branch = [string] #optional
+}
+
+Properties
+
+Destination - Loction where git repo will be cloned to.  This folder must be empty or contain an existing git repository for the initial synch.
+GitPath - Path to git.  This can be a UNC path, but be sure that the computer account for the target server has access to the share.
+Url - Clone url for the git repository
+Branch - Optional branch to clone and keep in synch.  Defaults to master.

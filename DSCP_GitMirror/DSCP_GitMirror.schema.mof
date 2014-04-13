@@ -1,0 +1,10 @@
+
+[ClassVersion("1.0.0.0"), FriendlyName("GitMirror")]
+class DSCP_GitMirror : OMI_BaseResource
+{
+	[Key, Description("Loction where git repo will be cloned to.  This folder must be empty or contain an existing git repository for the initial synch")] String Destination;
+	[Required, Description("Path to git")] String GitPath;
+	[Required, Description("Clone url for the git repository")] String Url;
+	[Write, Description("Optional branch to clone and keep in synch")] String Branch;
+};
+
